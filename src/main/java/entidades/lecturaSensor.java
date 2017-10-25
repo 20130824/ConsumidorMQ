@@ -1,5 +1,6 @@
 package entidades;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -9,13 +10,18 @@ public class lecturaSensor {
 
     private String fechaGeneracion;
     private int IdDispositivo;
-    private Number temperatura;
-    private Number humedad;
+
+    private Float temperatura;
+
+    private Float humedad;
     @Id
     @GeneratedValue
     private long id;
 
-    public lecturaSensor(String fechaGeneracion, int idDispositivo, Number temperatura, Number humedad) {
+    public lecturaSensor() {
+    }
+
+    public lecturaSensor(String fechaGeneracion, int idDispositivo, Float temperatura, Float humedad) {
         this.fechaGeneracion = fechaGeneracion;
         IdDispositivo = idDispositivo;
         this.temperatura = temperatura;
@@ -39,19 +45,19 @@ public class lecturaSensor {
         IdDispositivo = idDispositivo;
     }
 
-    public Number getTemperatura() {
+    public Float getTemperatura() {
         return temperatura;
     }
 
-    public void setTemperatura(Number temperatura) {
+    public void setTemperatura(Float temperatura) {
         this.temperatura = temperatura;
     }
 
-    public Number getHumedad() {
+    public Float getHumedad() {
         return humedad;
     }
 
-    public void setHumedad(Number humedad) {
+    public void setHumedad(Float humedad) {
         this.humedad = humedad;
     }
 

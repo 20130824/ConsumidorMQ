@@ -27,9 +27,8 @@
                     text: "Dynamic Data"
                 },
                 axisX:{
-                    title: "timeline",
-                    valueFormatString: "YYYY-MM-DDTHH:MM:SS",
-                    gridThickness: 2
+                    interval: 10,
+                    intervalType: "hour"
                 },
                 axisY: {
                     includeZero: false
@@ -40,10 +39,10 @@
                 }]
             });
 
-            var xVal;
+            var xVal = "";
             var yVal = 100;
             var updateInterval = 1000;
-            var dataLength = 5; // number of dataPoints visible at any point
+            var dataLength = 20; // number of dataPoints visible at any point
 
             var updateChart = function (x, y) {
                 xVal = x;
@@ -76,7 +75,7 @@
             //console.log(obj.fechaGeneracion);
 
 
-           updateChart(Date.parse(obj.fechaGeneracion), obj.temperatura);
+           updateChart(obj.fechaGeneracion.toString(), obj.temperatura);
             //datos.push(mensaje.data);
         }
 

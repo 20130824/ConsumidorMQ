@@ -1,10 +1,15 @@
 package main;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import entidades.lecturaSensor;
 import freemarker.template.Configuration;
 import jms.Consumidor;
 import org.apache.activemq.broker.BrokerService;
 import org.eclipse.jetty.websocket.api.Session;
+import services.BootStrapService;
 import services.ServidorMensajesWebSocketHandler;
+import services.sensorServices;
 import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 
@@ -13,9 +18,7 @@ import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 import static spark.Spark.*;
 
@@ -38,6 +41,9 @@ public class Main {
         configuration.setClassForTemplateLoading(Main.class, "/templates");
         FreeMarkerEngine freeMarkerEngine = new FreeMarkerEngine(configuration);
 
+
+        BootStrapService.getInstancia().init();
+
         exception(Exception.class, (exception, request, response) -> {
             exception.printStackTrace();
         });
@@ -47,7 +53,23 @@ public class Main {
         get("/", (request, response) -> {
 
             Map<String, Object> attributes = new HashMap<>();
+            List<lecturaSensor> lecturaList = new ArrayList<>();
 
+            lecturaList = sensorServices.getInstancia().findAll();
+            JSONArray jsonArray = new JSONArray();
+
+            for(lecturaSensor ls : lecturaList){
+                JSONObject jsonObject = new org.json.JSONObject()
+                        .put("IdDispositivo", ls.getIdDispositivo())
+                        .put("fechaGeneracion", ls.getFechaGeneracion())
+                        .put("humedad",ls.getHumedad())
+                        .put("temperatura", ls.getTemperatura());
+
+
+                jsonArray.put(jsonObject);
+            }
+
+            attributes.put("arreglo", jsonArray);
 
             return new ModelAndView(attributes, "index.ftl");
         }, freeMarkerEngine);

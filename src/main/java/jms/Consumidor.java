@@ -1,7 +1,11 @@
 package jms;
 
+import com.google.gson.Gson;
+import entidades.lecturaSensor;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.json.simple.JSONObject;
 import services.ServidorMensajesWebSocketHandler;
+import services.sensorServices;
 
 import javax.jms.*;
 import java.text.SimpleDateFormat;
@@ -69,8 +73,16 @@ public class Consumidor {
             public void onMessage(Message message) {
                 try {
                     TextMessage messageTexto = (TextMessage) message;
-                    System.out.println("El mensaje de texto recibido: " + messageTexto.getText());
-                    sesionAdmin.getRemote().sendString(messageTexto.getText());
+                   // System.out.println("El mensaje de texto recibido: " + messageTexto.getText());
+                    String s = messageTexto.getText();
+
+                    Gson gson = new Gson();
+                    lecturaSensor ls = gson.fromJson( s , lecturaSensor.class );
+
+                  //  sensorServices.getInstancia().crear(ls);
+
+
+                  //  sesionAdmin.getRemote().sendString(messageTexto.getText());
                 }catch(Exception ex){
                     ex.printStackTrace();
                 }
