@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ConsumidorMQ.iml" filepath="$PROJECT_DIR$/.idea/modules/ConsumidorMQ.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ConsumidorMQ_main.iml" filepath="$PROJECT_DIR$/.idea/modules/ConsumidorMQ_main.iml" group="ConsumidorMQ" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ConsumidorMQ_test.iml" filepath="$PROJECT_DIR$/.idea/modules/ConsumidorMQ_test.iml" group="ConsumidorMQ" />
+    </modules>
+  </component>
+</project>
