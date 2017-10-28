@@ -18,6 +18,8 @@ import java.io.BufferedReader;
 import java.io.Console;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static spark.Spark.*;
@@ -56,12 +58,23 @@ public class Main {
             List<lecturaSensor> lecturaList = new ArrayList<>();
 
             lecturaList = sensorServices.getInstancia().findAll();
+
+            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            Date fecha1 = new Date();
+                    if(lecturaList.size() > 0) {
+                        fecha1 = dateFormat.parse(lecturaList.get(0).getFechaGeneracion());
+                    }
+           //a System.out.println("fecha " + fecha1);
             JSONArray jsonArray = new JSONArray();
 
             for(lecturaSensor ls : lecturaList){
+                Date fecha2 = dateFormat.parse(ls.getFechaGeneracion());
+
+                long diff = Math.abs(fecha1.getTime() - fecha2.getTime());
+                System.out.println("diferencia: " + diff);
                 JSONObject jsonObject = new org.json.JSONObject()
                         .put("IdDispositivo", ls.getIdDispositivo())
-                        .put("fechaGeneracion", ls.getFechaGeneracion())
+                        .put("fechaGeneracion", diff*-1)
                         .put("humedad",ls.getHumedad())
                         .put("temperatura", ls.getTemperatura());
 

@@ -3,13 +3,17 @@ package jms;
 import com.google.gson.Gson;
 import entidades.lecturaSensor;
 import org.apache.activemq.ActiveMQConnectionFactory;
-import org.json.simple.JSONObject;
+
+import org.json.JSONObject;
 import services.ServidorMensajesWebSocketHandler;
 import services.sensorServices;
 
 import javax.jms.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static services.ServidorMensajesWebSocketHandler.sesionAdmin;
 
@@ -73,16 +77,39 @@ public class Consumidor {
             public void onMessage(Message message) {
                 try {
                     TextMessage messageTexto = (TextMessage) message;
-                   // System.out.println("El mensaje de texto recibido: " + messageTexto.getText());
+                    System.out.println("El mensaje de texto recibido: " + messageTexto.getText());
                     String s = messageTexto.getText();
 
                     Gson gson = new Gson();
                     lecturaSensor ls = gson.fromJson( s , lecturaSensor.class );
 
-                  //  sensorServices.getInstancia().crear(ls);
+                    List<lecturaSensor> lecturaList = new ArrayList<>();
+
+                    lecturaList = sensorServices.getInstancia().findAll();
+                    DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+                    Date fecha1 = new Date();
+                    if(lecturaList.size() > 0) {
+                        fecha1 = dateFormat.parse(lecturaList.get(0).getFechaGeneracion());
+                    }
+
+                   sensorServices.getInstancia().crear(ls);
+
+                    JSONObject entrada = new JSONObject(s);
 
 
-                  //  sesionAdmin.getRemote().sendString(messageTexto.getText());
+                    Date fecha2 = dateFormat.parse(entrada.getString("fechaGeneracion"));
+
+                    long diff = (fecha1.getTime() - fecha2.getTime());
+
+                    String salida = new JSONObject()
+
+                            .put("IdDispositivo", entrada.getBigInteger("IdDispositivo"))
+                            .put("fechaGeneracion", diff*-1)
+                            .put("humedad", entrada.getFloat("humedad"))
+                            .put("temperatura", entrada.getFloat("temperatura"))
+
+                            .toString();
+                    sesionAdmin.getRemote().sendString(salida);
                 }catch(Exception ex){
                     ex.printStackTrace();
                 }
